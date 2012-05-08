@@ -191,7 +191,10 @@ class Chef
       puts("\n")
 
       msg_pair("Public IP Address", server.public_ip_address['addr'])
-      msg_pair("Private IP Address", server.private_ip_address['addr'])
+
+      if server.private_ip_address
+        msg_pair("Private IP Address", server.private_ip_address['addr'])
+      end
 
       print "\n#{ui.color("Waiting for sshd", :magenta)}"
 
@@ -210,7 +213,11 @@ class Chef
       #msg_pair("Security Groups", server.groups.join(", "))
       msg_pair("SSH Keypair", server.key_name)
       msg_pair("Public IP Address", server.public_ip_address['addr'])
-      msg_pair("Private IP Address", server.private_ip_address['addr'])
+
+      if server.private_ip_address
+        msg_pair("Private IP Address", server.private_ip_address['addr'])
+      end
+
       msg_pair("Environment", config[:environment] || '_default')
       msg_pair("Run List", config[:run_list].join(', '))
     end
