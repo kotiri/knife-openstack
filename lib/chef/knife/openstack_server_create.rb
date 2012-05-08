@@ -172,6 +172,12 @@ class Chef
 
       msg_pair("Instance ID", server.id)
       msg_pair("Instance Name", server.name)
+
+      while server.flavor.nil?
+        sleep 2
+        server.reload
+      end
+
       msg_pair("Flavor", server.flavor['id'])
       msg_pair("Image", server.image['id'])
       #msg_pair("Security Groups", server.groups.join(", "))
