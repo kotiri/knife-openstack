@@ -18,6 +18,7 @@
 #
 
 require 'chef/knife/openstack_base'
+require 'chef/json_compat'
 
 class Chef
   class Knife
@@ -32,6 +33,21 @@ class Chef
 
         validate!
 
+        case config[:format]
+          when 'summary'
+            render_summary
+          when 'json'
+            render_json
+          else
+            ui.error("Unrecognised format: #{config[:format]}")
+            exit 1
+        end
+
+      end
+
+      private
+
+      def render_summary
         server_list = [
           ui.color('Instance ID', :bold),
           ui.color('Name', :bold),
@@ -65,7 +81,10 @@ class Chef
                          end
         end
         puts ui.list(server_list, :uneven_columns_across, 8)
+      end
 
+      def render_json
+        puts JSONCompat.to_json_pretty(connection.servers.all.sort_by(&:id))
       end
     end
   end
